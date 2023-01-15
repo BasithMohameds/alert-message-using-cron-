@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h1 style="Text-align:center;">Store Data To Mongodb</h1>
+    <h3 id="notification"></h3>
+    <form method="get" action='http://localhost:8080/home'>
+        <div id="submitcontainer">
+            <input ClassName="submitinput" type="text" name="Name" placeholder="Enter Your name..." required><br>
+            <input ClassName="submitinput" type="date" name="date" placeholder="Select date..." required><br>
+            <input ClassName="submitinput" type="time" name="time" required><br>
+            <input ClassName="submitinput" type="submit" value="Submit">
+        </div>
+    </form><br>
+    <a href='http://localhost:8080/home/data'>View Stored details</a><br><br>
+    <div id="demo">
+        <button id="value" onclick="fetch()">fetch all data</button>
+        <button id="specific" onclick="fetchOne()">fetch Todays data</button>
+        <br>
+    </div class="Table">
+    <div Class="TBcontainer">
+        <table id="table">
+            <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>DATE</th>
+                <th>TIME</th>
+                <th>clear</th>
+            </tr>
+        </table>
+        <table id="tableOne">
+            <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>DATE</th>
+                <th>TIME</th>
+                <th>REMINDER</th>
+            </tr>
+        </table>
+    </div>
+    <h3></h3>
+    <script>
+        const socket = io('http://localhost:8080')
+        // console.log(socket)
+        socket.on('connect', function () {
+            console.log('Connected to Server');
+        });
+        socket.on('newMessage', (message) => {
+            console.log('new message from server:', message)
+            // document.querySelector('h3').innerHTML = message;
+            // alert(message);
+            $('#notification').append(`<br>${message}&nbsp;&nbsp;&nbsp;&nbsp;<button class="deletemsg">Delete</button>`)
+            $(".deletemsg").on('click',function(){
+                $(this).parent().remove();
+            })
+        })
+    </script>
+</body>
+
+</html>
